@@ -42,14 +42,32 @@ redacktor_text.setPlaceholderText('Введите текст...')
 notes = {}
 
 def append_note():
-    notename,ok = QInputDialog.getText(window,'добавить заметку','Название заметки:')
-    if notename and ok:
-        notes_list.addItem(notename)
-        notes[notename] = {'Теги': [], 'Текст': ''}
+    note_name,ok = QInputDialog.getText(window,'добавить заметку','Название заметки:')
+    if note_name and ok:
+        notes_list.addItem(note_name)
+        notes[note_name] = {'Теги': [], 'Текст': ''}
     print(notes)
 def save_note():
     if notes_list.selectedItems():
-        pass
+        note_name = notes_list.selectedItems()[0].text()
+        note_text = text.toPlainText()#вытаскиываем текст
+        notes[note_name]['Текст'] = note_text
+def show_note():
+    note_name = notes_list.selectedItems()[0].text()
+    note_text = notes[note_name]['Текст']
+    text.setText(note_text)
+
+button_notes3.clicked.connect(save_note)
+notes_list.itemClicked.connect(show_note)
+def del_note():
+    if notes_list.selectedItems():
+        note_name = notes_list.selectedItems()[0].text()
+        del notes[note_name]
+        notes_list.clear()
+        notes_list.addItems(notes)
+        print('1234567890')
+button_notes2.clicked.connect(del_note)
+
 # TODO: ПОСЛЕ ДОБАВЛЕНИЯ ЗАМЕТКИ ТЕКСТ СТИРАЕТСЯ И ДОБАВЛЯЕТСЯ
 
 button_notes1.clicked.connect(append_note)
