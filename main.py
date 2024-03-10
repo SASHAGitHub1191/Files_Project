@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QListWidget, QLabel, QVBoxLayout, QPushButton, QLineEdit, QHBoxLayout, QInputDialog
-
+import json
 from PyQt6.QtCore import Qt
 from random import randint
 from  random import shuffle
@@ -39,8 +39,10 @@ h_line3.addWidget(button_tegs1)
 h_line3.addWidget(button_tegs2)
 v_line.addWidget(button_tegs3)
 redacktor_text.setPlaceholderText('Введите текст...')
-notes = {}
-
+def load_info():
+    with open('note.json','r', encoding='UTF-8') as file:
+        return json.load(file)
+notes = load_info()
 def append_note():
     note_name,ok = QInputDialog.getText(window,'добавить заметку','Название заметки:')
     if note_name and ok:
@@ -57,6 +59,7 @@ def show_note():
     note_text = notes[note_name]['Текст']
     text.setText(note_text)
 
+
 button_notes3.clicked.connect(save_note)
 notes_list.itemClicked.connect(show_note)
 def del_note():
@@ -67,8 +70,12 @@ def del_note():
         notes_list.addItems(notes)
         print('1234567890')
 button_notes2.clicked.connect(del_note)
+def save_file():
+    with open('note.json','w', encoding='UTF-8') as file:
+        json.dump(notes, file)
 
-# TODO: ПОСЛЕ ДОБАВЛЕНИЯ ЗАМЕТКИ ТЕКСТ СТИРАЕТСЯ И ДОБАВЛЯЕТСЯ
+
+# TODO: g
 
 button_notes1.clicked.connect(append_note)
 app.exec()
